@@ -5,7 +5,7 @@ var router = express.Router();
 // /search/...
 router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Express' });
-  res.json("test")
+  res.json(     "test")
 });
 
 module.exports = router;
