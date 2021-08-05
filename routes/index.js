@@ -14,7 +14,7 @@ router.get('/most_popular', (req, res, next) => {
   let page = req.query.page
   if (page === undefined) page = 1
   // Req API key
-  if (req.query.api_key != 123) {
+  if (req.query.api_key != '123') {
     res.json('Invalid API key!')
   } else {
     // we want to return the movies that are true for most popular
@@ -23,7 +23,10 @@ router.get('/most_popular', (req, res, next) => {
     const indexToStart = (page - 1) * 20
     const indexToEnd = indexToStart + 19
     results = results.slice(indexToStart, indexToEnd)
-    res.json(results);
+    res.json({
+      page,
+      results
+    });
   }
 })
 
