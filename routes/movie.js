@@ -3,7 +3,16 @@ var router = express.Router();
 
 const movieDetails = require('../data/movieDetails')
 
+function requireJSON(req, res, next) {
+  if (!req.is('application/json')) {
+    res.json({ msg: "Content type must be application/json" })
+  } else {
+    next()
+  }
+}
+
 router.param(('movieId'), (req, res, next) => {
+  // if only certain apiKeys are allowed to hit movieId
   // update db w/ analytics data
   console.log("someone hit a route that used the movieId wildcard");
   next()
@@ -27,8 +36,24 @@ router.get('/top_rated', (req, res, next) => {
 
 
 // POST /movie/{movieId}/rating
+router.post('/:movieId/rating', requireJSON, (req, res, next) => {
+  const movieId = req.params.movieId
+  // console.log(req.get('content-type'))
+  const userRating = req.body.value
+  if (userRating < .5 || userRating > 10) {
+    res.json({ msg: "Rating must be between .5 and 10" })
+  } else {
+    res.json({ 
+      msg: "Thank you for rating!",
+      status_code: 200 
+    })
+  }
+})
 
 // DELETE /movie/{movieId}/rating
+router.delete('/:movieId/rating', requireJSON, (req, res, next) => {
+  res.json({ msg: "Rating deleted! 👻"})
+})
 
 //! this must come last because it will always be true for /movie/...
 // GET /movie/{movieId}
