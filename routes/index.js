@@ -17,7 +17,7 @@ router.get('/most_popular', (req, res, next) => {
   let results = movies.filter(movie => movie.most_popular);
   // handle pagination of 20 results per page
   const indexToStart = (page - 1) * 20
-  const indexToEnd = indexToStart + 19
+  const indexToEnd = indexToStart + 20
   results = results.slice(indexToStart, indexToEnd)
   res.json({
     page,

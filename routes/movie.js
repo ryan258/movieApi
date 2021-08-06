@@ -3,10 +3,34 @@ var router = express.Router();
 
 const movieDetails = require('../data/movieDetails')
 
+router.param(('movieId'), (req, res, next) => {
+  // update db w/ analytics data
+  console.log("someone hit a route that used the movieId wildcard");
+  next()
+})
+
 /* GET movie data. */
 // /movie/... 
 //! everything we make here will already have /movie/ in front of it or it wouldn't have happened in the first place
+// GET /movie/{top_rated}
+router.get('/top_rated', (req, res, next) => {
+  let page = req.query.page
+  if (!page) page = 1
+  let results = movieDetails.sort((a,b)=>{
+    return b.vote_average - a.vote_average
+  })
+  const indexToStart = (page - 1) * 20
+  // const indexToEnd = indexToStart + 19
+  results = results.slice(indexToStart, indexToStart+20)
+  res.json(results)
+})
 
+
+// POST /movie/{movieId}/rating
+
+// DELETE /movie/{movieId}/rating
+
+//! this must come last because it will always be true for /movie/...
 // GET /movie/{movieId}
 router.get('/:movieId', function(req, res, next) {
   const movieId = req.params.movieId
@@ -24,11 +48,5 @@ router.get('/:movieId', function(req, res, next) {
     res.json(results)
   }
 });
-// GET /movie/{topRated}
-
-
-// POST /movie/{movieId}/rating
-
-// DELETE /movie/{movieId}/rating
 
 module.exports = router;
