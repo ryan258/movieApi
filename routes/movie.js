@@ -4,7 +4,7 @@ var router = express.Router();
 const movieDetails = require('../data/movieDetails')
 
 function requireJSON(req, res, next) {
-  if (!req.is('application/json')) {
+  if (!req.is('application/json')) { // if there is no body, it returns null
     res.json({ msg: "Content type must be application/json" })
   } else {
     next()
